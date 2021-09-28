@@ -40,7 +40,7 @@
     parseHeartRate(value) {
       // In Chrome 50+, a DataView is returned instead of an ArrayBuffer.
       value = value.buffer ? value : new DataView(value);
-      let flags = value.getUint8(0);
+      let flag = value.getUint8(0);
       
       let result = {};
       let index = 1;
@@ -49,29 +49,29 @@
       result.heartRate = result.heartRate & 0x00FFFFFF;
       result.heartRate = result.heartRate/10;
       
-      //let value_units = flag & 0x01; //0 is Celsius
-      //let timestamp = flag & 0x02; //1:present
-      //let temperature_type = flag & 0x04; //1:present
+      let value_units = flag & 0x01; //0 is Celsius
+      let timestamp = flag & 0x02; //1:present
+      let temperature_type = flag & 0x04; //1:present
       //
-      //if (timestamp){
-      //  result.time = value.getUint16(index, true);
-       //  index += 2;
-      //    result.month = value.getUint8(index, true);
-      //  index += 1;
-      //  result.day = value.getUint8(index, true);
-      //  index += 1;
-      //  result.hour = value.getUint8(index, true);
-      //  index += 1;
-      //  result.min = value.getUint8(index, true);
-      //  index += 1;
-      //  result.sec = value.getUint8(index, true);
-      //  index += 1;
-      //}
+      if (timestamp){
+        result.time = value.getUint16(index, true);
+        index += 2;
+        result.month = value.getUint8(index, true);
+        index += 1;
+        result.day = value.getUint8(index, true);
+        index += 1;
+        result.hour = value.getUint8(index, true);
+        index += 1;
+        result.min = value.getUint8(index, true);
+        index += 1;
+        result.sec = value.getUint8(index, true);
+        index += 1;
+      }
       
-      //if (temperature_type){
-      //result.type = value.getUint8(index, true);
-      //index += 1;
-      //}
+      if (temperature_type){
+      result.type = value.getUint8(index, true);
+      index += 1;
+      }
       
       return result;
     }
